@@ -70,7 +70,7 @@
              }
              sessionStorage.login = "true";
              console.log("Success ");
-             window.location = "/html/mainpage.html"; // Redirecting to other page.
+             window.location = "../html/main.html"; // Redirecting to other page.
              return true;
          })
          .catch(function(error) {
