@@ -1,11 +1,10 @@
  // Initialize Firebase
  function body_onload() {
      sessionStorage.login = "";
-     localStorage.rememberUser = "";
-     if (localStorage.chkRememb != null) {
-         document.getElementById("txtSignInEmail").value = localStorage.chkRemember;
+     if (localStorage.rememberUser != null) {
+         document.getElementById("txtSignInEmail").value = localStorage.rememberUser;
          document.getElementById("txtSignInRemember").checked = true;
-
+         console.log(localStorage.rememberUser);
      }
 
      var config = {
@@ -39,7 +38,7 @@
          txtPassword.focus();
          return;
      }
-
+     console.log(validateSignIn());
      if (validateSignIn() === true) {
          //window.open('mainpage.html') //opens the target page while Id & password matches
          window.location = "/html/mainpage.html"; // Redirecting to other page.
@@ -48,8 +47,8 @@
          alert("Error Password or Username, You have left " + attempt + " attempt;");
          // Disabling fields after 3 attempts.
          if (attempt == 0) {
-             document.getElementById("txtEmployeeID").disabled = true;
-             document.getElementById("txtPassword").disabled = true;
+             document.getElementById("txtSignInEmail").disabled = true;
+             document.getElementById("txtSignInPassword").disabled = true;
              document.getElementById("btnSignIn").disabled = true;
              alert("Sorry you have ran out of attempt contact admin or refresh browser to try again");
          }
@@ -58,32 +57,28 @@
  }
 
  function validateSignIn() {
-     var email = document.getElementById("txtEmployeeID").value;
-     var password = document.getElementById("txtPassword").value;
-     var rememberchk = document.getElementById("chkRemember").value;
-     var valid = false;
+     var email = document.getElementById("txtSignInEmail").value;
+     var password = document.getElementById("txtSignInPassword").value;
+     var rememberchk = document.getElementById("txtSignInRemember").value;
 
      // Sign in user
      firebase.auth().signInWithEmailAndPassword(email, password)
          .then(function(firebaseUser) {
              // Success 
-             if (document.getElementById("chkRemember").checked === true) {
-                 localStorage.rememberUser = username;
+             if (document.getElementById("txtSignInRemember").checked === true) {
+                 localStorage.rememberUser = email;
              }
              sessionStorage.login = "true";
-             valid = true;
+             console.log("Success ");
+             window.location = "../html/main.html"; // Redirecting to other page.
+             return true;
          })
          .catch(function(error) {
              // Error Handling
              var errorCode = error.code;
              var errorMessage = error.message;
              console.log('signIn error', error);
-             // ...
          });
-
-     if (valid === true) {
-         return true;
-     }
      return false;
  }
 
@@ -98,7 +93,6 @@
  }
 
 
- //onclick='Javascript:checkEmail()
  function checkEmail() {
 
      var email = document.getElementById('txtSignInEmail');
